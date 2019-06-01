@@ -11,7 +11,6 @@ define((require, exports, module) => {
       // Common
       this.common(content)
     }
-
     static updatePartyBattleStatus (partyNo, inBattle) {
 
     }
@@ -134,27 +133,32 @@ define((require, exports, module) => {
     static ['repair'](content){
       store.commit('repair/clear')
     }
-
     static ['practice/offer'](content){
+	  //console.log(content.postData['num'],content)
+	  let num_id = content.postData['num']
       _.each(content.enemy_equip, (v,k) => {
-        store.commit('practice_enemy/updatePracticeEquip', { 
-          serialId: k, 
+        store.commit('practice_enemy/updatePracticeEquip', {
+		  numId: num_id,
+		  serialId: k, 
           updateData: v
         })
       })
       _.each(content.enemy_sword, (v,k) => {
         store.commit('practice_enemy/updatePracticeSword', {
-          serialId: k, 
+          numId: num_id,
+		  serialId: k, 
           updateData: v
         })
         store.commit('practice_enemy/updatePracticeSword', {
-          serialId: k,
+		  numId: num_id,
+		  serialId: k,
           updateData: {isEnemy: true}
         })
       })
       _.each(content.enemy_party, (v,k) => {
         store.commit('practice_enemy/updatePracticeParty', {
-          partyNo: k, 
+		  numId: num_id,
+		  partyNo: k, 
           updateData: v
         })
       })
@@ -444,14 +448,18 @@ define((require, exports, module) => {
       let eventContent = {
         episode_id: null,
         field_id: null,
-        layer_num: null,
-        select_event_layer_num: null,
+		square_id: null,
+        layer_num: null
       }
       let eventType = _.get(TRHMasterData.getMasterData('Event'), [content.postData.event_id*(-1), 'type'], 0)
       eventContent.episode_id = content.postData.event_id*(-1)
       eventContent.field_id = content.postData.event_field_id
+	  eventContent.square_id = content.research.square_id ? content.research.square_id : "-"
       eventContent.layer_num = content.postData.event_layer_id == 0 ? 1 : content.postData.event_layer_id
-      if(eventType==6){
+	  
+	  console.log('eventContent',content.postData,eventContent.square_id)
+      if(eventType==6 || eventType==8 || eventType==9){
+		//These maps have other layers
         eventContent.layer_num = content.select_event_layer_num
       }
       store.commit('sally/updateSally', {
@@ -475,9 +483,16 @@ define((require, exports, module) => {
       store.commit('battle/clearBattleEnemy')
     }
     static ['sally/eventforward'] (content) {
-      this['sally/forward'](content)
+	  let event = content.postData
+	  if (!_.isEmpty(content.research.warp)) {
+		let new_layer_num = content.research.warp.layer_id
+		store.commit('sally/updateSally', {
+			updateData: {layer_num: new_layer_num}
+	    })
+	  }
+	  
       if(content.gimmick.draw){
-        //毒箭
+        //Poison Arrows
         if(content.gimmick.draw==19 || (content.gimmick.draw>=53 && content.gimmick.draw<=55)){
           _.each(content.gimmick.result.effect, (v, k)=>{
             store.commit('swords/updateSword',{
@@ -486,7 +501,7 @@ define((require, exports, module) => {
             })
           })
         }
-        //炸弹
+        //Bombs
         else if(content.gimmick.draw==20 || (content.gimmick.draw>=60 && content.gimmick.draw<=62)){
           _.each(content.gimmick.result.serial_ids, (v, k)=>{
             store.commit('equip/updateEquip',{
@@ -496,6 +511,8 @@ define((require, exports, module) => {
           })
         }
       }
+	  //runs sally/forward static method in addition to the one just run ^
+	  this['sally/forward'] (content)
     }
     static ['forge/start'] (content) {
       store.commit('forge/updateForge', {
@@ -662,6 +679,13 @@ define((require, exports, module) => {
         })
       }
     }
+	
+	static ['mission/index'] (content) {
+	  //console.log(content)
+	  _.each(content, v => {
+		//console.log(v)  
+	  })
+	}
 
     static ['mission/reward'] (content) {
       _.each(content.item, v => {
@@ -760,4 +784,5 @@ define((require, exports, module) => {
       })
     }
   }
+  console.log('ro')
 })

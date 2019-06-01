@@ -1,4 +1,5 @@
 define((require, exports, module) => {
+  let TRH = require('app/core/const/index')
   return (store) => {
     store.subscribe((mutation, state) => {
       if (state.config.evolution_notice == true) {
@@ -7,16 +8,17 @@ define((require, exports, module) => {
           if (!serial_id) return
           let finished_at = moment(parseValues(mutation.payload.updateData.back[0].finished_at))
           let sword_id = _.get(state, ['swords', 'serial', serial_id, 'sword_id'], 0)
-          let sword_name = _.get(state, ['swords', 'serial', serial_id, 'name'], '-')
+          //let sword_nameJPN = _.get(state, ['swords', 'serial', serial_id, 'name'], '-')
+		  let sword_name = _.get(state, ['swords', 'serial', serial_id, 'name'], '-') == '-' ? '-' : TRH.SwordENGName[sword_id][sword_id]
           if(state.evolution.back[0].isIntervalSet == false || state.evolution.back[0].isIntervalSet == null){
             let check = setInterval(function isEvolutionFinished(){
               state.evolution.back[0].isIntervalSet = true
               if(finished_at != null) {
                 if(finished_at.isBefore(Date.now())){
                   store.dispatch('notice/addNotice', {
-                    title: `${sword_name}修行结束！`,
-                    message: `结束时间：${finished_at.format('HH:mm:ss')}`,
-                    context: '记得及时刷新游戏接他回本丸哦！',
+                    title: `${sword_name}'s Kiwame Training has ended!`,
+                    message: `End Time： ${finished_at.format('HH:mm:ss')}`,
+                    context: 'TRH~ will need you to refresh game after picking him at Citadel to show he has returned!',
                     renotify: true,
                     disableAutoClose: true,
                     swordBaseId: sword_id,

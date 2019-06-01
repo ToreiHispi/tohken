@@ -1,6 +1,6 @@
 define((require, exports, module) => {
   return {
-    '0': '全て',
+    '0': 'All',
     '1': '短刀',
     '2': '脇差',
     '3': '打刀',
@@ -9,7 +9,7 @@ define((require, exports, module) => {
     '6': '槍',
     '7': '薙刀',
     '8': '特殊打刀',
-    '9': '鬼大太刀',
+    '9': 'Demon Ootachi',
     '10': '剣'
   }
 })

@@ -28,6 +28,7 @@ define((require, exports, module) => {
         state.inBattle = false
       },
       fatigueToV (state) {
+		// Fatigue after entering practice match (no loss of fatigue)
         let swords = state.swords.serial
         for(let s in swords) {
           let sword = swords[s]
@@ -35,6 +36,7 @@ define((require, exports, module) => {
         }
       },
       fatigueToVV (state) {
+		// Fatigue after entering map (automatic -10 fatigue)
         let swords = state.swords.serial
         for(let s in swords) {
           let sword = swords[s]

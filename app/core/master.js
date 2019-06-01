@@ -1,8 +1,8 @@
 define((require, exports, module) => {
   return class TRHMasterData {
-    static getMasterData (k) {
-      return TRHMasterData[k]
-    }
+		static getMasterData (k) {
+			return TRHMasterData[k]
+		}
     // Load data from local cache
     static load (store) {
       if (!chrome.devtools) {
@@ -27,7 +27,9 @@ define((require, exports, module) => {
         console.log('loadLocal')
         _.each(saved, (v, k) => {
           TRHMasterData[k] = v
-          console.log(TRHMasterData[k])
+		  if (k=="EventSquare" || k== "Sword" || k=="Equip") {
+			console.log('MasterData',TRHMasterData[k])
+		  }
           store.commit('loadData', {
             key: k,
             loaded: !_.isNull(v)
@@ -91,7 +93,7 @@ define((require, exports, module) => {
         TRHMasterData.initEventLayerMaster(store),
         TRHMasterData.initEventSquareMaster(store)
       ]).then(() => {
-        console.log('done', store)
+        console.log(store)
       })
     }
     // Init User Level Data
@@ -112,7 +114,7 @@ define((require, exports, module) => {
         .value()
       return localforage.setItem('UserLevelMaster', TRHMasterData.UserLevel)
         .then(() => {
-          console.log(TRHMasterData.UserLevel)
+          //console.log('UserLevel set',TRHMasterData.UserLevel)
           store.commit('loadData', {
             key: 'UserLevel',
             loaded: true
@@ -147,7 +149,7 @@ define((require, exports, module) => {
         .value()
       return localforage.setItem('SwordLevelMaster', TRHMasterData.SwordLevel)
         .then(() => {
-          console.log(TRHMasterData.SwordLevel)
+          //console.log('SwordLevel ShareWorld set',TRHMasterData.SwordLevel)
           store.commit('loadData', {
             key: 'SwordLevel',
             loaded: true
@@ -184,14 +186,14 @@ define((require, exports, module) => {
           if(swordNickname[arr[0]]){
             obj['name'] = swordNickname[arr[0]]
           }
-          obj['alias'] = arr[3]
-          obj['symbol'] = _.toInteger(arr[4])
-          obj['styleId'] = _.toInteger(arr[5])
+          obj['alias'] = arr[3] // Furigana
+          obj['symbol'] = _.toInteger(arr[4]) // Evol ID (0 Normal, 1 Toku, 2 Kiwame)
+          obj['styleId'] = _.toInteger(arr[5]) // School
           obj['type'] = _.toInteger(arr[6])
           obj['realType'] = _.toInteger(arr[7])
           obj['rarity'] = _.toInteger(arr[8])
           obj['maxLevel'] = _.toInteger(arr[9])
-          obj['???'] = _.toInteger(arr[10])
+          obj['???'] = _.toInteger(arr[10]) // HRA vs Touken
           obj['hp'] = _.toInteger(arr[11])
           obj['atk'] = _.toInteger(arr[12])
           obj['def'] = _.toInteger(arr[13])
@@ -219,14 +221,14 @@ define((require, exports, module) => {
           obj['artist'] = arr[35]
           obj['voiceActor'] = arr[36]
           obj['imageId'] = _.toInteger(arr[37])
-          obj['shareWord'] = _.toInteger(arr[38])
+          obj['shareWord'] = _.toInteger(arr[38]) // Exp Table
           return obj
         })
         .keyBy('swordId')
         .value()
       return localforage.setItem('SwordMaster', TRHMasterData.Sword)
         .then(() => {
-          console.log(TRHMasterData.Sword)
+          //console.log('Sword set',TRHMasterData.Sword)
           store.commit('loadData', {
             key: 'Sword',
             loaded: true
@@ -271,7 +273,7 @@ define((require, exports, module) => {
         .value()
       return localforage.setItem('EquipMaster', TRHMasterData.Equip)
         .then(() => {
-          console.log(TRHMasterData.Equip)
+          //console.log('Equip set',TRHMasterData.Equip)
           store.commit('loadData', {
             key: 'Equip',
             loaded: true
@@ -311,7 +313,7 @@ define((require, exports, module) => {
         .value()
       return localforage.setItem('ConsumableMaster', TRHMasterData.Consumable)
         .then(() => {
-          console.log(TRHMasterData.Consumable)
+          //console.log('Consumable set',TRHMasterData.Consumable)
           store.commit('loadData', {
             key: 'Consumable',
             loaded: true
@@ -364,7 +366,7 @@ define((require, exports, module) => {
         .value()
       return localforage.setItem('FieldSquareMaster', TRHMasterData.FieldSquare)
         .then(() => {
-          console.log(TRHMasterData.FieldSquare)
+          //console.log('FieldSquare set',TRHMasterData.FieldSquare)
           store.commit('loadData', {
             key: 'FieldSquare',
             loaded: true
@@ -396,7 +398,7 @@ define((require, exports, module) => {
         .value()
       return localforage.setItem('EventMaster', TRHMasterData.Event)
         .then(() => {
-          console.log(TRHMasterData.Event)
+          //console.log('Event set',TRHMasterData.Event)
           store.commit('loadData', {
             key: 'Event',
             loaded: true
@@ -439,7 +441,7 @@ define((require, exports, module) => {
         .value()
       return localforage.setItem('EventLayerMaster', TRHMasterData.EventLayer)
         .then(() => {
-          console.log(TRHMasterData.EventLayer)
+          //console.log('EventLayer set',TRHMasterData.EventLayer)
           store.commit('loadData', {
             key: 'EventLayer',
             loaded: true
@@ -492,7 +494,7 @@ define((require, exports, module) => {
         .value()
       return localforage.setItem('EventSquareMaster', TRHMasterData.EventSquare)
         .then(() => {
-          console.log(TRHMasterData.EventSquare)
+          //console.log('EventSquare set',TRHMasterData.EventSquare)
           store.commit('loadData', {
             key: 'EventSquare',
             loaded: true

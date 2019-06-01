@@ -2,8 +2,13 @@ define((require, exports, module) => {
   return {
     SwordStyle: require('./sword/style'),
     SwordType: require('./sword/type'),
+	SwordENGType: require('./sword/type_eng'),
     SwordRange: require('./sword/range'),
     SwordInjury: require('./sword/injury'),
+	SwordENGName: require('./sword/name'),
+	EquipENGName: require('./equip/name'),
+	EquipENGType: require('./equip/type'),
+	ItemENGName: require('./item/name'),
     FATIGUE: {
       STATUS: {
         NONE: 0,
@@ -11,9 +16,9 @@ define((require, exports, module) => {
         VERY_TIERD: 2
       },
       VALUE: {
-        VERY_TIERD: 8,
-        TIERD: 20,
-        NOMAL: 49,
+        VERY_TIERD: 8, //upper limit (inclusive)
+        TIERD: 19,
+        NORMAL: 49,
         MAX: 100
       }
     }

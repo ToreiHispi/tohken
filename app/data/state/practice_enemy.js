@@ -2,6 +2,7 @@ define((require, exports, module) => {
   const defaultEquipModel = require('../model/equip')
   const defaultSwordModel = require('../model/sword')
   const defaultPartyModel = require('../model/party')
+  //const enemyModel = require('../model/practice_enemy')
   return {
     namespaced: true,
     state () {

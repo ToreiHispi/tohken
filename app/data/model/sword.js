@@ -42,20 +42,20 @@ define((require, exports, module) => {
       inBattle: false,
       isEnemy: false,
       get name () {
-        return _.get(TRHMasterData.getMasterData('Sword'), [this.sword_id, 'name'], '暂未获取') + (_.get(TRHMasterData.getMasterData('Sword'), [this.sword_id, 'symbol'], 0) === 2 ? '·極' : '')
+        return _.get(TRHMasterData.getMasterData('Sword'), [this.sword_id, 'name'], 'Not Available') + (_.get(TRHMasterData.getMasterData('Sword'), [this.sword_id, 'symbol'], 0) === 2 ? '·🌸' : '')
       },
       get baseId () {
         return _.get(TRHMasterData.getMasterData('Sword'), [this.sword_id, 'baseId'], 0)
       },
       get injury () {
         let hpp = (this.hp / this.hp_max)
-        if (hpp >= TRH.SwordInjury.MINOR_INJURY_PERCENTAGE) {
+        if (hpp > TRH.SwordInjury.MINOR_INJURY_PERCENTAGE) {
           return (TRH.SwordInjury.NONE)
         }
-        if (hpp >= TRH.SwordInjury.MEDIUM_INJURY_PERCENTAGE) {
+        if (hpp > TRH.SwordInjury.MEDIUM_INJURY_PERCENTAGE) {
           return (TRH.SwordInjury.MINOR_INJURY)
         }
-        if (hpp >= TRH.SwordInjury.SERIOUS_INJURY_PERCENTAGE) {
+        if (hpp > TRH.SwordInjury.SERIOUS_INJURY_PERCENTAGE) {
           return (TRH.SwordInjury.MEDIUM_INJURY)
         }
         if (hpp > 0) {
@@ -68,11 +68,11 @@ define((require, exports, module) => {
         if (this.inBattle && this.battleFatigue != null) {
           fatigue = this.battleFatigue
         }
-        if (!this.inBattle && fatigue < TRH.FATIGUE.VALUE.NOMAL && !_.isUndefined(this.recovered_at) && this.status!=3 && !this.isEnemy) {
+        if (!this.inBattle && fatigue < TRH.FATIGUE.VALUE.NORMAL && !_.isUndefined(this.recovered_at) && this.status!=3 && !this.isEnemy) {
           let now = Math.floor(Date.now() / 1000)
           let recovered = Math.floor(this.recovered_at / 1000)
           fatigue = fatigue + Math.floor((now - recovered) / 180) * 3
-          fatigue = fatigue > TRH.FATIGUE.VALUE.NOMAL ? TRH.FATIGUE.VALUE.NOMAL : fatigue
+          fatigue = fatigue > TRH.FATIGUE.VALUE.NORMAL ? TRH.FATIGUE.VALUE.NORMAL : fatigue
         }
         return fatigue
       },
@@ -85,7 +85,7 @@ define((require, exports, module) => {
           return 0
         } else if (fatigue <= TRH.FATIGUE.VALUE.TIERD) {
           return 1
-        } else if (fatigue <= TRH.FATIGUE.VALUE.NOMAL) {
+        } else if (fatigue <= TRH.FATIGUE.VALUE.NORMAL) {
           return 2
         } else if (fatigue <= TRH.FATIGUE.VALUE.MAX) {
           return 3
@@ -105,6 +105,10 @@ define((require, exports, module) => {
         let type = _.get(TRHMasterData.getMasterData('Sword'), [this.sword_id, 'type'], 0)
         return TRH.SwordType[type]
       },
+	  get typeNameENG () {
+		let type = _.get(TRHMasterData.getMasterData('Sword'), [this.sword_id, 'type'], 0)
+        return TRH.SwordENGType[type]
+	  },
       get styleName () {
         let styleId = _.get(TRHMasterData.getMasterData('Sword'), [this.sword_id, 'styleId'], 0)
         if(styleId==0)
@@ -117,18 +121,22 @@ define((require, exports, module) => {
         return TRH.SwordRange[type]
       },
       get protectName () {
-        return this.protect ? '锁' : '-'
+        return this.protect ? '🔒' : '-'
       },
       get evoName () {
-        if(this.symbol==0)
-          return '普通'
+		if(this.symbol==0)
+          return 'Normal' //Normal
         if(this.symbol==2)
-          return '極'
+          return 'Kiwame' //Kiwame
         if(this.symbol==1){
           if(this.sword_id==this.baseId)
-            return '特'
-          else return ['', '特', '特二', '特三'][this.sword_id-this.baseId]
+            return 'Toku' //Toku
+          else return ['❇', 'Toku','Toku Ni', 'Toku San'][this.sword_id-this.baseId] //Toku Ni, San
         }
+        //'❇' //Normal
+        // '🌸' //Kiwame
+        // '❁' //Toku
+          // ['❇', '❁','✿', '✾'][this.sword_id-this.baseId] //Toku Ni/San
       },
       get equipSlot () {
         return _.get(TRHMasterData.getMasterData('Sword'), [this.sword_id, 'equipSlot'], 3)

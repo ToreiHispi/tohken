@@ -127,6 +127,64 @@ define((require, exports, module) => {
       }
     }
   })
+  
+  Vue.component('pvp_offer', {
+	template: '#pvp',
+	props: ['num-id'],
+	computed: {
+	  pvp_equip (state){
+		//console.log('num',_.get(state, ['practice_enemy'], {}))
+        return _.get(state, ['practice_enemy','num',this.numId], {})
+      },
+      pvp_sword (state){
+        return _.get(state, ['practice_enemy', 'num', this.numId], {})
+      },
+      pvp_party (state){
+		//console.log('huh', !(_.isEmpty(_.get(state, ['practice_enemy', 'num'], {}))) ? Object.keys(_.get(state, ['practice_enemy', 'num'], {})).length : "0")
+        return _.get(state, ['practice_enemy', 'num',this.numId], {})
+      }
+	}
+  })
+  
+  Vue.component('pvp_offer_1', {
+	template: '#pvp1',
+	props: [],
+	computed: {
+	  
+	}
+  })
+  
+  Vue.component('pvp_offer_2', {
+	template: '#pvp2',
+	props: [],
+	computed: {
+	  
+	}
+  })
+  
+  Vue.component('pvp_offer_3', {
+	template: '#pvp3',
+	props: [],
+	computed: {
+	  
+	}
+  })
+  
+  Vue.component('pvp_offer_4', {
+	template: '#pvp4',
+	props: [],
+	computed: {
+	  
+	}
+  })
+  
+  Vue.component('pvp_offer_5', {
+	template: '#pvp5',
+	props: [],
+	computed: {
+	  
+	}
+  })
 
   const partyListWrapper = {
     template: `
@@ -171,7 +229,8 @@ define((require, exports, module) => {
         option: {
           info: false,
           value: false,
-          equip: false
+          equip: false,
+		  limits: false
         }
       }
     },
@@ -207,7 +266,7 @@ define((require, exports, module) => {
     methods: {
       saveLog (name) {
         if(name=='Swords'){
-          Swords="\"番号\",\"刀名\",\"稀有度\",\"种类\",\"刀派\",\"等级\",\"次级经验\",\"累计经验\",\"段数\",\"生存\",\"打击\",\"统率\",\"机动\",\"冲力\",\"侦查\",\"隐蔽\",\"范围\",\"必杀\",\"疲劳\",\"刀装数\",\"刀装\",\"御守\",\"马\",\"锁\",\"获取时间\""
+          Swords="\"No\",\"Name\",\"Rarity\",\"Type\",\"School\",\"Level\",\"EXP Needed\",\"Current EXP\",\"Evolution\",\"Survival\",\"Impact\",\"Leadership\",\"Mobility\",\"Impulse\",\"Scouting\",\"Camouflage\",\"Range\",\"Killing Blow\",\"Fatigue\",\"Slots\",\"Troops\",\"Omamori\",\"Horse\",\"Lock\",\"Acquired\""
           _.forEach(_.get(store.state,['swords','serial']), function(_this){
             Swords += "\n\"'"+_this.sword_id+"\",\"'"+_this.name+"\",\"'"+_this.rarity+"\",\"'"+_this.typeName+"\",\"'"+_this.styleName+"\",\"'"+_this.level+"\",\"'"+_this.nextExp+"\",\"'"+_this.exp+"\",\"'"+_this.evoName+"\",\"'"+_this.hp+"/"+_this.hp_max+ (_this.hp_up>0 ? "(+"+_this.hp_up+")" : "") + "\",\"'" + _this.atk + (_this.atk_up>0 ? "(+"+_this.atk_up+")" : "") + "\",\"'" + _this.def + (_this.def_up>0 ? "(+"+_this.def_up+")":"")+"\",\"'"+_this.mobile+(_this.mobile_up>0?"(+"+_this.mobile_up+")":"")+"\",\"'"+_this.back+(_this.back_up>0?"(+"+_this.back_up+")":"")+"\",\"'"+_this.scout+(_this.scout_up>0 ? "(+"+_this.scout_up+")":"")+"\",\"'"+_this.hide+(_this.hide_up>0?"(+"+_this.hide_up+")":"")+"\",\"'"+_this.rangeName+"\",\"'"+_this.loyalties+"\",\"'"+(_this.inBattle ? _this.battleFatigue : _this.vfatigue)+"\",\"'"+_this.equipSlot+"\",\"'"+_.get(store.state, ['equip', 'serial', _this.equip_serial_id1, 'name'], '-')+(_this.equipSlot>1 ? "/"+_.get(store.state, ['equip', 'serial', _this.equip_serial_id2, 'name'], '-') : "")+(_this.equipSlot>2 ? "/"+_.get(store.state, ['equip', 'serial', _this.equip_serial_id3, 'name'], '-') : "")+"\",\"'"+['-','有','極'][_this.item_id]+"\",\"'"+_.get(store.state, ['equip', 'serial', _this.horse_serial_id, 'name'], '-')+"\",\"'"+_this.protectName+"\",\"'"+moment(_this.created_at).format('YYYY/MM/DD HH:mm:ss') + "\""
           })
@@ -231,7 +290,7 @@ define((require, exports, module) => {
       },
       saveLog (name) {
         if(name == 'ForgeLog') {
-          ForgeLog = "\"番号\",\"刀名\",\"木炭\",\"玉鋼\",\"冷却材\",\"砥石\",\"御札\",\"结束时间\""
+          ForgeLog = "\"No.\",\"Sword\",\"Charcoal\",\"Steel\",\"Coolant\",\"Whetstone\",\"Help Token\",\"End Time\""
           _.forEach(_.get(store.state, ['log','forge']), function(_this) {
             ForgeLog += "\n\"'" + (_this.sword_id ? _this.sword_id : '-') + "\",\"'" + (_this.sword_id ? _.get(TRHMasterData.getMasterData('Sword'), [_this.sword_id, 'name'], '-') : '空') + "\",\"'" + (_this.charcoal ? _this.charcoal : '-') + "\",\"'" + (_this.steel ? _this.steel : '-') + "\",\"'" + (_this.coolant ? _this.coolant : '-') + "\",\"'" + (_this.file ? _this.file : '-') + "\",\"'" + (_this.consumable_id ? _.get(TRHMasterData.getMasterData('Consumable'), [_this.consumable_id, 'name'], '-').replace('御札・', '') : '-') + "\",\"'" + (moment(_this.finished_at).format('MM/DD HH:mm:ss')) + "\""
           })
@@ -241,9 +300,9 @@ define((require, exports, module) => {
           saveAs(blob, "TRHForge" + (Date.now()) + ".csv");
         }
         else if(name == 'BattleLog') {
-          BattleLog = "\"部隊\",\"掉落\",\"時代-地域\",\"階数\",\"戦闘地ID\",\"評価\",\"戦闘時点\""
+          BattleLog = "\"Team\",\"Drop\",\"Era-Map\",\"Layer\",\"Node ID\",\"Rank\",\"Time\""
           _.forEach(_.get(store.state, ['log','battle']), function(_this) {
-            rank_name = ['0', '一騎', 'S', 'A', 'B', 'C', '敗北'][_this.rank] || ''
+            rank_name = ['0', 'Duel', 'S', 'A', 'B', 'C', 'Fail'][_this.rank] || ''
             BattleLog += "\n\"'" + (_this.party_no ? _this.party_no : '-') + "\",\"'" + (_this.get ? _this.get : '空') + "\",\"'" + (_this.episode_id ? _this.episode_id : '-') + '-' + (_this.field_id ? _this.field_id : '-') + "\",\"'" + (_this.layer_num ? _this.layer_num : '-') + "\",\"'" + (_this.square_id ? _this.square_id : '-') + "\",\"'" + (rank_name) + "\",\"'" + (moment(_this.now).format('MM/DD HH:mm:ss')) + "\""
           })
           blob = new Blob([BattleLog], {
@@ -252,9 +311,9 @@ define((require, exports, module) => {
           saveAs(blob, "TRHBattle" + (Date.now()) + ".csv");
         }
         else if(name == 'PracticeLog') {
-          PracticeLog = "\"部隊\",\"敵名\",\"敵LV\",\"評価\",\"戦闘時点\""
+          PracticeLog = "\"Team\",\"Opponent\",\"Level\",\"Rank\",\"Time\""
           _.forEach(_.get(store.state, ['log','practice']), function(_this) {
-            rank_name = ['0', '一騎', 'S', 'A', 'B', 'C', '敗北'][_this.rank] || ''
+            rank_name = ['0', 'Duel', 'S', 'A', 'B', 'C', 'Fail'][_this.rank] || ''
             PracticeLog += "\n\"'" + (_this.party_no ? _this.party_no : '-') + "\",\"'" + (_this.enemy_name ? _this.enemy_name : '-') + "\",\"'" + "Lv." + (_this.enemy_level) + "\",\"'" + (rank_name) + "\",\"'" + (moment(_this.now).format('MM/DD HH:mm:ss')) + "\""
           })
           blob = new Blob([PracticeLog], {
@@ -263,7 +322,7 @@ define((require, exports, module) => {
           saveAs(blob, "TRHPractice" + (Date.now()) + ".csv");
         }
         else if(name == 'DutyLog') {
-          DutyLog = "\"马当番\",\"畑当番\",\"手合\",\"结束时间\""
+          DutyLog = "\"Horsekeeping\",\"Fieldwork\",\"Sparring\",\"End Time\""
           _.forEach(_.get(store.state, ['log','duty']), function(_this) {
             let sword_name={
               horse_id1: '-',

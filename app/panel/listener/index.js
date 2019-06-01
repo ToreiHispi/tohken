@@ -14,6 +14,7 @@ define((require, exports, module) => {
           let path = tohken[2]
           if (server  !== 'static' && path.indexOf('?uid') > -1) {
             let action = path.split('?')[0]
+			let uid = path.split('?')[1]
             let postData = _.isObject(request['request']['postData'])
               ? _(request['request']['postData']['text'])
                 .replace(/%5F/g, '_')
@@ -22,6 +23,7 @@ define((require, exports, module) => {
               : {}
             request.getContent((content, encoding) => {
               let jsonObj = JSON.parse(content) || {}
+			  //console.log(content)
               jsonObj['postData'] = _.isArray(postData) ? _.fromPairs(postData) : postData
               if (_(jsonObj).pick(['iv', 'data']).keys().value().length === 2) {
                 // Need decrypt

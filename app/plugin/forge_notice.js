@@ -1,5 +1,6 @@
 define((require, exports, module) => {
   let TRHMasterData = require('app/core/master')
+  let TRH = require('app/core/const/index')
   return (store) => {
     store.subscribe((mutation, state) => {
       
@@ -7,7 +8,12 @@ define((require, exports, module) => {
           let { updateData } = mutation.payload
           let getSwordId = updateData.sword_id
           let time = moment(parseValues(mutation.payload.updateData.finished_at))
-          let swordName = _.get(TRHMasterData.getMasterData('Sword'), [getSwordId, 'name'], '无')
+          //let swordNameJPN = _.get(TRHMasterData.getMasterData('Sword'), [getSwordId, 'name'], 'None')
+		  let swordName = _.get(TRHMasterData.getMasterData('Sword'), [getSwordId, 'name'], 'None') == 'None' ? 'None' : TRH.SwordENGName[String(getSwordId)]['full']
+		  let timeout = _.get(state, ['config', 'timeout'], 3)*1000
+          if (timeout<3000){
+            timeout = 3000
+          }
           let logId = `${updateData.slot_no}#${time.unix()}`
           store.commit('log/addForgeLog', {
             logId,
@@ -16,21 +22,24 @@ define((require, exports, module) => {
           if (state.config.forge_notice == true) {
           if (getSwordId) {
             store.dispatch('notice/addNotice', {
-              title: `锻刀剧透： ${swordName}`,
-              message: `结束时间：${time.format('HH:mm:ss')}`,
-              context: time.isBefore() ? '已经結束了呦！' : '请耐心等待哟（或者拍个加速？）',
+              title: `Smithing Result: ${swordName}`,
+              message: `End Time: ${time.format('HH:mm:ss')}`,
+              context: time.isBefore() ? "It's done!" : 'Please wait patiently or use a Help Token.',
+			  timeout: timeout,
               tag: getSwordId,
               renotify: true,
+			  disableAutoClose: false,
               swordBaseId: getSwordId,
               icon: `static/sword/${getSwordId}.png`
             })
           } else {
             store.dispatch('notice/addNotice', {
-              title: `锻刀剧透等待中`,
-              message: `结束时间：${time.format('HH:mm:ss')}`,
-              context: '需要重新进入锻刀页面才能看到呦',
+              title: `Forging New Sword`,
+              message: `End Time： ${time.format('HH:mm:ss')}`,
+              context: 'You need to re-enter the Smithing tab to see the sword prediction.',
               tag: getSwordId,
               renotify: true,
+			  disableAutoClose: false,
               swordBaseId: getSwordId,
               icon: `static/sword/${getSwordId}.png`
             })

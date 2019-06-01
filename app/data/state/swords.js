@@ -14,7 +14,9 @@ define((require, exports, module) => {
         if (!state.serial[serialId]) {
           Vue.set(state.serial, serialId, defaultSwordModel())
         }
+		//console.log('serial',serialId)
         mergeModel(state.serial[serialId], updateData)
+		//console.log('data',updateData,'serial',serialId)
       },
       clear (state) {
         state.serial = {}

@@ -9,6 +9,7 @@ define((require, exports, module) => {
       square_id: null,
       target_id: null,
       get category(){
+		//Returns type of Node
         if(this.episode_id>0)
           return _.get(TRHMasterData.getMasterData('FieldSquare'),[this.episode_id, this.field_id, this.layer_num, this.square_id, 'category'],0)
         else

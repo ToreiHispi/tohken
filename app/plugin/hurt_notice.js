@@ -1,10 +1,11 @@
 define((require, exports, module) => {
   let TRHMasterData = require('app/core/master')
+  let TRH = require('app/core/const/index')
   return (store) => {
     store.subscribe((mutation, state) => {
 
       
-        if (mutation.type === 'battle/updateBattle' || mutation.type === 'battle/updatePracticeBattle') {
+        if (mutation.type == 'battle/updateBattle' || mutation.type == 'battle/updatePracticeBattle') {
           let { updateData } = mutation.payload
           let resultParty = _(_.get(updateData, ['result', 'player', 'party', 'slot']))
             .values()
@@ -24,10 +25,11 @@ define((require, exports, module) => {
             .mapValues((v, k) => {
               let sword = _.get(state, ['swords', 'serial', v.serial_id], {})
               return _.extend(v, {
-                name: sword.name,
+                //name: sword.name,
+				name: sword.sword_id ? TRH.SwordENGName[String(sword.sword_id)][String(sword.sword_id)] : '-',
                 injury: sword.injury,
                 baseId: sword.baseId,
-                battleStatusText: ['正常', '軽傷', '中傷', '重傷', '戰線崩壞', '破壞'][v.battleStatus]
+                battleStatusText: ['Normal', 'Minor', 'Moderate', 'Severe', 'Retreated', 'Broken'][v.battleStatus]
               })
             })
             .values()
@@ -76,33 +78,41 @@ define((require, exports, module) => {
               let sword = _.get(state, ['swords', 'serial', v.serial_id], {})
               let equipstring = ''
               if(v.equip[1]!=null)
-                equipstring += '['+_.get(TRHMasterData.getMasterData('Equip'), [v.equip[1], 'name'], '-') + '] '
+                //equipstring += '['+_.get(TRHMasterData.getMasterData('Equip'), [v.equip[1], 'name'], '-') + '] '
+				equipstring += '['+(v.equip[1] ? TRH.EquipENGName[v.equip[1]] : '-')+'] '
               if(v.equip[2]!=null)
-                equipstring += '['+_.get(TRHMasterData.getMasterData('Equip'), [v.equip[2], 'name'], '-') + '] '
+                //equipstring += '['+_.get(TRHMasterData.getMasterData('Equip'), [v.equip[2], 'name'], '-') + '] '
+				equipstring += '['+ (v.equip[2] ? TRH.EquipENGName[v.equip[2]] : '-') +'] '
               if(v.equip[3]!=null)
-                equipstring += '['+_.get(TRHMasterData.getMasterData('Equip'), [v.equip[3], 'name'], '-') + '] '
+                //equipstring += '['+_.get(TRHMasterData.getMasterData('Equip'), [v.equip[3], 'name'], '-') + '] '
+				equipstring += '['+(v.equip[3] ? TRH.EquipENGName[v.equip[3]] : '-')+'] '
               return {
                 serial_id: v.serial_id,
-                name: sword.name,
+                //name: sword.name,
+				name: sword.sword_id ? TRH.SwordENGName[sword.sword_id][sword.sword_id] : '-',
                 equips: equipstring
               }
             })
             .values()
             .value()
-          let swordName = _.get(TRHMasterData.getMasterData('Sword'), [getSwordId, 'name'], '无')
+          //let swordName = _.get(TRHMasterData.getMasterData('Sword'), [getSwordId, 'name'], '无')
+		  let swordName = (getSwordId>0 ? TRH.SwordENGName[getSwordId]['full'] : 'None')
           if (getInstrumentId!=0){
             if(getSwordId!=0){
-              swordName+=" & "+ _.get(TRHMasterData.getMasterData('Consumable'), [getInstrumentId, 'name'], '-')
+              //swordName+=" & "+ _.get(TRHMasterData.getMasterData('Consumable'), [getInstrumentId, 'name'], '-')
+			  swordName+=" & "+ getInstrumentId ? TRH.ItemENGName[getInstrumentId] : '-'
             }else{
-              swordName= _.get(TRHMasterData.getMasterData('Consumable'), [getInstrumentId, 'name'], '-')
+              //swordName= _.get(TRHMasterData.getMasterData('Consumable'), [getInstrumentId, 'name'], '-')
+			  swordName= getInstrumentId ? TRH.ItemENGName[getInstrumentId] : '-'
               getSwordId = 'item'+getInstrumentId
             }
           }
+		  let getName = (getSwordId>0 ? TRH.SwordENGName[getSwordId][getSwordId] : 'None')
           if(mutation.type === 'battle/updateBattle'){
             store.commit('log/addBattleLog', {
               logId: `${state.sally.party_no}#${state.sally.episode_id}-${state.sally.field_id}@${moment(updateData.now).unix()}`,
               party_no: state.sally.party_no,
-              get: swordName,
+              get: getName,
               episode_id: state.sally.episode_id,
               field_id: state.sally.field_id,
               layer_num: state.sally.layer_num,
@@ -133,18 +143,18 @@ define((require, exports, module) => {
               if (swordName){
                 if (playerEquips.length)
                 store.dispatch('notice/addNotice', {
-                  title: `战斗报告`,
-                  message: _.map(playerEquips, o => `[刀装破坏] ${o.name} - ${o.equips}`).join('<br>')+'<br>'+_.map(playerParty, o => `[${o.battleStatusText}] ${o.name} HP -${o.hp}`).join('<br>'),
-                  context: `掉落：${swordName}！`,
+                  title: `Battle Report`,
+                  message: '<b style="font-size:100%;">[Troop Loss]</b><br>'+_.map(playerEquips, o => `${o.name} - ${o.equips}`).join('<br>')+'<br>'+_.map(playerParty, o => `[${o.battleStatusText}] ${o.name} HP -${o.hp}`).join('<br>'),
+                  context: `Drop： ${swordName}`,
                   timeout: timeout,
                   swordBaseId: getSwordId,
                   icon: `static/sword/${getSwordId}.png`,
                 })
                 else
                 store.dispatch('notice/addNotice', {
-                  title: `战斗报告`,
+                  title: `Battle Report`,
                   message: _.map(playerParty, o => `[${o.battleStatusText}] ${o.name} HP -${o.hp}`).join('<br>'),
-                  context: `掉落：${swordName}！`,
+                  context: `Drop： ${swordName}`,
                   timeout: timeout,
                   swordBaseId: getSwordId,
                   icon: `static/sword/${getSwordId}.png`,
@@ -154,9 +164,9 @@ define((require, exports, module) => {
             else if (playerEquips.length) {
               if (swordName)
               store.dispatch('notice/addNotice', {
-                title: `战斗报告`,
-                message: _.map(playerEquips, o => `[刀装破坏] ${o.name} - ${o.equips}`).join('<br>'),
-                context: `掉落：${swordName}！`,
+                title: `Battle Report`,
+                message: _.map(playerEquips, o => `[Troops Loss] ${o.name} - ${o.equips}`).join('<br>'),
+                context: `Drop： ${swordName}`,
                 timeout: timeout,
                 swordBaseId: getSwordId,
                 icon: `static/sword/${getSwordId}.png`,
@@ -164,9 +174,9 @@ define((require, exports, module) => {
             }
             else if (getSwordId !== 0) {
               store.dispatch('notice/addNotice', {
-                title: `战斗报告`,
-                message: '本场无受伤',
-                context: `掉落：${swordName}！`,
+                title: `Battle Report`,
+                message: 'No Injuries',
+                context: `Drop： ${swordName}`,
                 timeout: timeout,
                 swordBaseId: getSwordId,
                 icon: `static/sword/${getSwordId}.png`

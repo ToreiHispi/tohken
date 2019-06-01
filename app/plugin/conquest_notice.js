@@ -3,7 +3,8 @@ define((require, exports, module) => {
     store.subscribe((mutation, state) => {
       if (state.config.conquest_notice == true) {
         if (mutation.type === 'party/updateParty') {
-          let party_name = mutation.payload.updateData.party_name
+          let party_nameJPN = mutation.payload.updateData.party_name
+		  let party_name = party_nameJPN.replace('第','Team ').replace('部隊','')
           let status = mutation.payload.updateData.status
           let finished_at = mutation.payload.updateData.finished_at
           let party = _.get(state, ['party', 'parties', mutation.payload.updateData.party_no])
@@ -14,9 +15,9 @@ define((require, exports, module) => {
               if(status == 2 && moment(parseValues(finished_at)).isBefore(Date.now())) {
                 if(party.isNoticed == false || party.isNoticed == null){
                 store.dispatch('notice/addNotice', {
-                  title: `${party_name}远征结束！`,
-                  message: `结束时间：${moment(parseValues(finished_at)).format('HH:mm:ss')}`,
-                  context: '请尽快收取！',
+                  title: `${party_name} has return from expedition!`,
+                  message: `End time： ${moment(parseValues(finished_at)).format('HH:mm:ss')}`,
+                  context: 'Please recieve them as soon as possible!',
                   renotify: false,
                   disableAutoClose: true,
                   swordBaseId: state.config.secretary,
@@ -34,7 +35,7 @@ define((require, exports, module) => {
                 party.isIntervalSet = false
                 clearInterval(check)
               }
-            }, 1000)
+            }, 3000)
           }
         }
       }

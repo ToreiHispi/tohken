@@ -16,7 +16,10 @@ define((require, exports, module) => {
       },
       get level () {
         return _.get(TRHMasterData.getMasterData('Equip'), [this.equip_id, 'rarity'], 0)
-      }
+      },
+	  get type () {
+		return _.get(TRHMasterData.getMasterData('Equip'), [this.equip_id, 'type'], 0)
+	  }
     }
   }
 })

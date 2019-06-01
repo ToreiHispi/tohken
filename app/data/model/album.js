@@ -8,7 +8,7 @@ define((require, exports, module) => {
       bgm_flg: null,
       new_flg: null,
       get name () {
-        return _.get(TRHMasterData.getMasterData('Sword'), [this.sword_id, 'name'], '暂未获取') + (_.get(TRHMasterData.getMasterData('Sword'), [this.sword_id, 'symbol'], 0) === 2 ? '·極' : '')
+        return _.get(TRHMasterData.getMasterData('Sword'), [this.sword_id, 'name'], 'N/A') + (_.get(TRHMasterData.getMasterData('Sword'), [this.sword_id, 'symbol'], 0) === 2 ? '·🌸' : '')
       },
       get all_img_flg () {
         return this.image_flg==31 ? 1 : 0

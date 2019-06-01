@@ -19,8 +19,8 @@ define((require, exports, module) => {
               up_type = param[mutation.payload.updateData[k]].up_type
               is_max = param[mutation.payload.updateData[k]].is_max
               up_value = param[mutation.payload.updateData[k]].up_value
-              valueResult = is_max ? 'MAX' : '+'+ up_value
-              typeResult = ['機動', '統率', '偵察', '生存', '打撃', '衝力'][up_type-1]
+              valueResult = is_max ? ' MAX' : ' +'+ up_value
+              typeResult = ['Mobility', 'Leadership', 'Scouting', 'Survival', 'Impact', 'Impulse'][up_type-1]
               paramResult[k]='('+typeResult+valueResult+')'
             }
           })
@@ -59,9 +59,9 @@ define((require, exports, module) => {
               state.duty.isIntervalSet = true
               if(finished_at != null && moment(parseValues(finished_at)).isBefore(Date.now())) {
                 store.dispatch('notice/addNotice', {
-                  title: `内番结束！`,
-                  message: `结束时间：${moment(parseValues(finished_at)).format('HH:mm:ss')}`,
-                  context: '请尽快收取！',
+                  title: 'Internal Affairs Ended',
+                  message: `End Time： ${moment(parseValues(finished_at)).format('HH:mm:ss')}`,
+                  context: 'Please re-assign duties as soon as possible!',
                   renotify: true,
                   disableAutoClose: true,
                   swordBaseId: state.config.secretary,
@@ -74,8 +74,8 @@ define((require, exports, module) => {
           }
           if(_.every([horse_id1, horse_id2, field_id1, field_id2, bout_id1, bout_id2], _.isNull) || JSON.stringify(mutation.payload.updateData)=="{}" || JSON.stringify(mutation.payload.updateData)=="[]") {
             store.dispatch('notice/addNotice', {
-              title: `内番未放置`,
-              context: '请安排刀刀们干活啦！',
+              title: 'Internal Affairs Assignment',
+              context: 'Your swords aren\'t doing any chores!',
               disableAutoClose: true,
               swordBaseId: state.config.secretary,
               icon: `static/sword/${state.config.secretary}.png`
