@@ -6,7 +6,7 @@ Chrome插件一枚，总而言之多年之后经历了大规模重构
 * 疲劳度查看以及疲劳演算
 * Fatigue tracking and fatigue calculation
 * 远征，损坏提醒
-* Expedition and dammage reminders
+* Expedition and damage reminders
 * 锻刀和捞刀结果预知
 * Armory and swords result prediction
 
