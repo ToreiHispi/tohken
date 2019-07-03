@@ -457,7 +457,7 @@ define((require, exports, module) => {
 	  eventContent.square_id = content.research.square_id ? content.research.square_id : "-"
       eventContent.layer_num = content.postData.event_layer_id == 0 ? 1 : content.postData.event_layer_id
 	  
-	  console.log('eventContent',content.postData,eventContent.square_id)
+	  //console.log('eventContent',content.postData,eventContent.square_id)
       if(eventType==6 || eventType==8 || eventType==9){
 		//These maps have other layers
         eventContent.layer_num = content.select_event_layer_num

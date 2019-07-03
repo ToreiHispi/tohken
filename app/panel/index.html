@@ -111,7 +111,7 @@
           <span v-else>[Wait one moment...]</span>
           Basic game data
         </div>
-        <p>* Please go to the Formation tab. If you are already on the Formation tab, please go back to the Citadel and re-enter.</p>
+        <p>* Please go to the Formation tab. If you are already on the Formation tab, please go back to the Citadel then re-enter.</p>
       </div>
     </div>
   </div>
@@ -229,7 +229,7 @@
       <div class="map-info">
         <div style="float:left; width:50%;">Layers：{{sally.layer_num || '-'}}</div>
         <div v-if="sally.category===3" style="float:left; width:50%;">Node ID：<span style="color: red;">{{sally.square_id || '-'}}(Boss)</span></div>
-		<div v-else-if="sally.category===13" style="float:left; width:50%;">Node ID：<span style="color: red;">{{sally.square_id || '-'}}(Sub-Boss)</span></div>
+		<div v-else-if="sally.category>=12 && sally.category!=14" style="float:left; width:50%;">Node ID：<span style="color: red;">{{sally.square_id || '-'}}(Sub-Boss)</span></div>
         <div v-else style="float:left; width:50%;">Node ID：{{sally.square_id || '-'}}</div>
       </div>
       <div class="party-name">Enemy Team</div>
@@ -635,11 +635,13 @@
           <tbody>
             <tr v-for="battle in log.battle">
               <td>{{ battle.party_no || '-' }}</td>
-              <td v-if="battle.category === 3 || battle.category === 13" style="color: red;">{{ battle.get }}</td>
+              <td v-if="battle.category === 3" style="color: red;">{{ battle.get }}</td>
+			  <td v-else-if="battle.category>=12 && battle.category!=14" style="color: red;">{{ battle.get }}</td>
               <td v-else>{{ battle.get }}</td>
               <td>{{ battle.episode_id || '-' }}-{{ battle.field_id || '-' }}</td>
               <td>{{ battle.layer_num }}</td>
               <td v-if="battle.category === 3" style="color: red;">{{ battle.square_id }}(Boss)</td>
+			  <td v-else-if="battle.category>=12 && battle.category!=14" style="color:red;">{{ battle.square_id }}(Sub-Boss)</td>
               <td v-else>{{ battle.square_id }}</td>
               <td>{{ battle.rank | rank-name }}</td>
               <td>{{ battle.now | MMDDhhmmss }}</td>
@@ -655,7 +657,7 @@
           <thead>
             <tr>
               <th>Team</th>
-              <th>Userame</th>
+              <th>Username</th>
               <th>Level</th>
               <th>Rank</th>
               <th>Time</th>

@@ -69,6 +69,8 @@ define((require, exports, module) => {
     else if (episodeId < 0){
       let type = _.get(TRHMasterData.getMasterData('Event'), [episodeId, 'type'], 0)
       let map = _.get(TRHMasterData.getMasterData('EventLayer'), [episodeId, fieldId, layerNum, 'map'], 0)
+	  
+	  //console.log(TRHMasterData.getMasterData('Event'))
       if(type == 4){
 		//Regiment Maps
         map = fieldId
@@ -76,7 +78,39 @@ define((require, exports, module) => {
 	  if (type == 8 || type == 9) {
 		//Special Investigation Maps
 		if(layerNum == 2){
-			return '../../static/map/event' +  '_' + type + '_4.jpg'
+			return '../../static/map/event' +  '_' + type + '.jpg'
+		}
+		//console.log(TRHMasterData.getMasterData('Event')[episodeId]['type'])
+		
+		const evsq = TRHMasterData.getMasterData('EventSquare')
+		let evsql = evsq[episodeId][map][layerNum]
+		let vers = 1
+		let test = 0
+		for (i=48; i < Object.entries(evsq).length+48; i++) {
+			if (type == TRHMasterData.getMasterData('Event')[-i]['type']) {
+				let evsqL = evsq[-i][map][layerNum]
+				//for (a=1)
+				console.log(-i,Object.keys(evsqL).length)
+				if (evsqL['category'] !== evsql['category'] || evsqL['squareId'] !== evsql['squareId']) {
+					//Checks to see if maps are diff, if yes 'updates' version number
+					vers++
+				}
+				else {
+					continue
+				}
+			}
+		}
+		console.log(vers)
+		
+		if (map = 2) {
+			const ev = Object.values(TRHMasterData.getMasterData('Event'))
+			let vers = 0;
+			for (const v of ev) {
+				if (v['type'] == type) {
+					vers++
+				}
+			}
+			return '../../static/map/event' +  '_' + type + '_' + map + '_' + vers + '.jpg'
 		}
 	  }
 	  return '../../static/map/event' +  '_' + type + '_' + map + '.jpg'

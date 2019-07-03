@@ -14,7 +14,7 @@ chrome.devtools.inspectedWindow.eval('window.location.href', {}, function (resul
           message: {
             title: 'Welcome to ~TRH~',
             message: 'Please find the "Touken Ranbu Helper" tab in the new Dev panel.',
-            context: 'Build version：v1.2.0'
+            context: 'Build version：v1.2.2'
           }
         })
       }
