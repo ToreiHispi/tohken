@@ -27,9 +27,9 @@ define((require, exports, module) => {
         console.log('loadLocal')
         _.each(saved, (v, k) => {
           TRHMasterData[k] = v
-		  if (k=="EventSquare" || k== "EventLayer" || k=="Event") {
+		  //if (k=="EventSquare" || k== "EventLayer" || k=="Event" || k=="SwordLevel" k=="Sword") {
 			console.log('MasterData',k,TRHMasterData[k])
-		  }
+		  //}
           store.commit('loadData', {
             key: k,
             loaded: !_.isNull(v)
