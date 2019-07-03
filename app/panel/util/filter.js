@@ -70,7 +70,7 @@ define((require, exports, module) => {
       let type = _.get(TRHMasterData.getMasterData('Event'), [episodeId, 'type'], 0)
       let map = _.get(TRHMasterData.getMasterData('EventLayer'), [episodeId, fieldId, layerNum, 'map'], 0)
 	  
-	  //console.log(TRHMasterData.getMasterData('Event'))
+	  console.log(TRHMasterData.getMasterData('Event'))
       if(type == 4){
 		//Regiment Maps
         map = fieldId
@@ -82,34 +82,24 @@ define((require, exports, module) => {
 		}
 		//console.log(TRHMasterData.getMasterData('Event')[episodeId]['type'])
 		
-		const evsq = TRHMasterData.getMasterData('EventSquare')
-		let evsql = evsq[episodeId][map][layerNum]
-		let vers = 1
-		let test = 0
-		for (i=48; i < Object.entries(evsq).length+48; i++) {
-			if (type == TRHMasterData.getMasterData('Event')[-i]['type']) {
-				let evsqL = evsq[-i][map][layerNum]
-				//for (a=1)
-				console.log(-i,Object.keys(evsqL).length)
-				if (evsqL['category'] !== evsql['category'] || evsqL['squareId'] !== evsql['squareId']) {
-					//Checks to see if maps are diff, if yes 'updates' version number
-					vers++
-				}
-				else {
-					continue
-				}
-			}
-		}
-		console.log(vers)
+		//Tentative map version control
 		
-		if (map = 2) {
-			const ev = Object.values(TRHMasterData.getMasterData('Event'))
-			let vers = 0;
-			for (const v of ev) {
-				if (v['type'] == type) {
-					vers++
+		if (map >= 2) {
+			const evsq = TRHMasterData.getMasterData('EventSquare')
+			let evsql = evsq[episodeId][map][layerNum]
+			let vers = 1
+			for (i=48; i < Object.entries(evsq).length+48; i++) {
+				if (type == TRHMasterData.getMasterData('Event')[-i]['type']) {
+					if (evsq[-i] !== evsq[episodeId]) {
+						//Checks to see if maps are diff, if yes then 'updates' version number
+						vers++
+					}
+					else {
+						continue
+					}
 				}
 			}
+			console.log(vers)
 			return '../../static/map/event' +  '_' + type + '_' + map + '_' + vers + '.jpg'
 		}
 	  }
