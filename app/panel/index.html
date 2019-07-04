@@ -228,8 +228,8 @@
       <img v-if="sally.episode_id && sally.field_id && sally.layer_num" :src="sally.episode_id + '_' + sally.field_id + '_' + sally.layer_num | map-pattern" alt="空" class="mapPattern">
       <div class="map-info">
         <div style="float:left; width:50%;">Layers：{{sally.layer_num || '-'}}</div>
-        <div v-if="sally.category===3" style="float:left; width:50%;">Node ID：<span style="color: red;">{{sally.square_id || '-'}}(Boss)</span></div>
-		<div v-else-if="sally.category>=12 && sally.category!=14" style="float:left; width:50%;">Node ID：<span style="color: red;">{{sally.square_id || '-'}}(Sub-Boss)</span></div>
+        <div v-if="sally.category===3 || sally.category===12 || sally.category===17" style="float:left; width:50%;">Node ID：<span style="color: red;">{{sally.square_id || '-'}}(Boss)</span></div>
+		<div v-else-if="sally.category===13" style="float:left; width:50%;">Node ID：<span style="color: red;">{{sally.square_id || '-'}}(Sub-Boss)</span></div>
         <div v-else style="float:left; width:50%;">Node ID：{{sally.square_id || '-'}}</div>
       </div>
       <div class="party-name">Enemy Team</div>
@@ -640,8 +640,8 @@
               <td v-else>{{ battle.get }}</td>
               <td>{{ battle.episode_id || '-' }}-{{ battle.field_id || '-' }}</td>
               <td>{{ battle.layer_num }}</td>
-              <td v-if="battle.category === 3" style="color: red;">{{ battle.square_id }}(Boss)</td>
-			  <td v-else-if="battle.category>=12 && battle.category!=14" style="color:red;">{{ battle.square_id }}(Sub-Boss)</td>
+              <td v-if="battle.category == 3 || battle.category == 12 || battle.category == 17" style="color: red;">{{ battle.square_id }}(Boss)</td>
+			  <td v-else-if="battle.category== 13" style="color:red;">{{ battle.square_id }}(Sub-Boss)</td>
               <td v-else>{{ battle.square_id }}</td>
               <td>{{ battle.rank | rank-name }}</td>
               <td>{{ battle.now | MMDDhhmmss }}</td>
