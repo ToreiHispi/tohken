@@ -23,5 +23,12 @@ http://vuejs.org/
 
 https://github.com/eligrey/FileSaver.js
 
+## Touken Ranbu Fandom Site
+Please visit the Touken Rsnbu Fandom site for the most update information about not only the extension, but everything about the title.
+
+[Touken Ranbu Fandom](https://touken-ranbu.fandom.com/wiki/Touken_Ranbu_Wiki)
+
+[TKRB Helper Guide](https://touken-ranbu.fandom.com/wiki/Touken_Ranbu_Helper)
+
 ## License
 CC0 1.0 Universal
