@@ -64,7 +64,10 @@ define((require, exports, module) => {
     template: '#party-list',
     props: ['party-no'],
     computed: Vuex.mapState({
-      party (state) {
+      Psally (state){
+        return _.get(state, ['sally'], {})
+      },
+	  party (state) {
         return _.get(state, ['party', 'parties', this.partyNo], {})
       }
     })
@@ -278,7 +281,7 @@ define((require, exports, module) => {
       }
     }
   })
-
+  
   const Extra = Vue.component('extra', {
     template: '#extra',
     computed: {
@@ -353,6 +356,11 @@ define((require, exports, module) => {
 
   const Setting = Vue.component('setting', {
     template: '#setting',
+	data () {
+      return {
+        expand: false
+      }
+    },
     computed: {
       ..._.mapValues(store.state.config, (v, k) => {
           return {
@@ -440,10 +448,11 @@ define((require, exports, module) => {
       })
 
       localforage.getItem('Swords').then((data) => {
-        if (data && data.serial) _.each(data.serial, v => store.commit('swords/updateSword', {
+        if (data && data.serial) {
+		  _.each(data.serial, v => store.commit('swords/updateSword', {
           serialId: v.serial_id,
           updateData: v
-        }))
+        }))}
       })
 
       localforage.getItem('Party').then((data) => {
@@ -492,7 +501,8 @@ define((require, exports, module) => {
       scroll (name) {
         if (!$(`#${name}`).offset()) return
         window.scrollTo(0, $(`#${name}`).offset().top - 80)
-      }
+      },
+	  
     }
   })
 })

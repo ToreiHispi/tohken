@@ -1,6 +1,6 @@
 define((require, exports, module) => {
   return {
-    MINOR_INJURY_PERCENTAGE: 0.895,
+    MINOR_INJURY_PERCENTAGE: 0.9,
     MEDIUM_INJURY_PERCENTAGE: 0.645,
     SERIOUS_INJURY_PERCENTAGE: 0.305,
     DEATH_PERCENTAGE: 0,

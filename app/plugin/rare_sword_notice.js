@@ -7,12 +7,12 @@ define((require, exports, module) => {
         if (mutation.type === 'battle/updateBattle' || mutation.type === 'battle/updatePracticeBattle') {
           let { updateData } = mutation.payload
           let getSwordId = _.get(updateData, ['result', 'get_sword_id'])
-		  console.log(getSwordId)
+		  console.log('ID: ',getSwordId)
 		  let super_rare = [3, 5, 9, 11, 13, 15, 17, 31, 33, 35, 37, 43, 51, 53, 57, 63, 67, 69, 71, 77, 103, 105, 107, 112, 120, 124, 136, 140, 144]
 		  let rare = [7, 25, 55, 59, 65, 73, 79, 91, 97, 116, 118, 122, 128, 130, 132, 134, 138] //List of rare swords
 		  let drops = super_rare.concat(rare)
-		  let non_drops = [75, 142, 146, 148, 150, 154, 156, 158, 160, 162, 164, 166, 168] //These swords be event drops only (ie Nankai or Hizen)
-          if (drops.indexOf(parseInt(getSwordId, 10)) == -1 && non_drops.indexOf(parseInt(getSwordId, 10)) == -1) {
+		  let non_drops = [75, 142, 146, 148, 150, 154, 156, 158, 160, 162, 164, 166, 168, 170] //These swords be event drops only (ie Nankai or Hizen)
+          if (drops.indexOf(parseInt(getSwordId, 10)) == -1 && non_drops.indexOf(parseInt(getSwordId, 10)) == -1 && (parseInt(getSwordId, 10) > 0)) {
             console.log("not rare!")
             return
           }
@@ -25,7 +25,7 @@ define((require, exports, module) => {
           if (swordName){
 			if (super_rare.indexOf(parseInt(getSwordId, 10)) > -1) {
 			  store.dispatch('notice/addNotice', {
-				title: `Super Rare Sword Drop！`,
+				title: `Super Rare Sword Drop`,
 				message: `You got a super rare drop! Amazing!`,
 				context: `Drop： ${swordName}！`,
 				renotify: false,
@@ -37,7 +37,7 @@ define((require, exports, module) => {
 			}
 			else if (rare.indexOf(parseInt(getSwordId, 10)) > -1) {
 			  store.dispatch('notice/addNotice', {
-				title: `Rare Sword Drop！`,
+				title: `Rare Sword Drop`,
 				message: `You got a rare drop. How lucky!`,
 				context: `Drop： ${swordName}！`,
 				renotify: false,
@@ -49,11 +49,11 @@ define((require, exports, module) => {
 			}
 			else if (non_drops.indexOf(parseInt(getSwordId, 10)) > -1) {
 			  store.dispatch('notice/addNotice', {
-				title: `Event Sword Drop！`,
+				title: `Special Event Sword Drop`,
 				message: `You got a special event drop!`,
 				context: `Drop： ${swordName}！`,
 				renotify: false,
-				disableAutoClose: false,
+				disableAutoClose: true,
 				timeout: timeout,
 				swordBaseId: getSwordId,
 				icon: `static/sword/${getSwordId}.png`,

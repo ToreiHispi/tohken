@@ -36,7 +36,7 @@ define((require, exports, module) => {
             store.dispatch('notice/addNotice', {
               title: `Forging New Sword`,
               message: `End Time： ${time.format('HH:mm:ss')}`,
-              context: 'You need to re-enter the Smithing tab to see the sword prediction.',
+              context: 'You need to re-enter the Forge to see the sword prediction.',
               tag: getSwordId,
               renotify: true,
 			  disableAutoClose: false,

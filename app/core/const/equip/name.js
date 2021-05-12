@@ -33,9 +33,15 @@ define((require, exports, module) => {
     "31": "Bean Thrower·B",
     "32": "Bean Thrower·S",
     "33": "Bean Thrower·G",
-	"34": "Oni Enemy Troop·B",
-	"35": "Oni Enemy Troop·S",
-	"36": "Oni Enemy Troop·G",
+	"34": "Water Artillery·B",
+	"35": "Water Artillery·S",
+	"36": "Water Artillery·G",
+	"1001": "Demon Troop·B",
+	"1002": "Demon Troop·S",
+	"1003": "Demon Troop·G",
+	"1004": "Water Artillery·B",
+	"1005": "Water Artillery·S",
+	"1006": "Water Artillery·G",
     "10001": "01Oba",
     "10002": "02Mikuniguro",
     "10003": "03Matsukaze",
@@ -50,6 +56,10 @@ define((require, exports, module) => {
     "11041": "Iwaiichigou",
     "11042": "Iwainigou",
     "11043": "Iwaisangou",
-	"11044": "Iwaiyongou"
+	"11044": "Iwaiyongou",
+	"11045": "Iwaigogou",
+  "11046": "Iwairokugou",
+  "11047": "Iwainanagou",
+  "11048": "Iwaihachigou"
   }
 })

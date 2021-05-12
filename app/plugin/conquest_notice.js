@@ -18,8 +18,8 @@ define((require, exports, module) => {
                   title: `${party_name} has return from expedition!`,
                   message: `End time： ${moment(parseValues(finished_at)).format('HH:mm:ss')}`,
                   context: 'Please recieve them as soon as possible!',
-                  renotify: false,
-                  disableAutoClose: true,
+                  renotify: true,
+                  disableAutoClose: false,
                   swordBaseId: state.config.secretary,
                   icon: `static/sword/${state.config.secretary}.png`
                 })

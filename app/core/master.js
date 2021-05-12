@@ -27,9 +27,7 @@ define((require, exports, module) => {
         console.log('loadLocal')
         _.each(saved, (v, k) => {
           TRHMasterData[k] = v
-		  //if (k=="EventSquare" || k== "EventLayer" || k=="Event" || k=="SwordLevel" k=="Sword") {
 			console.log('MasterData',k,TRHMasterData[k])
-		  //}
           store.commit('loadData', {
             key: k,
             loaded: !_.isNull(v)
@@ -58,11 +56,22 @@ define((require, exports, module) => {
       // Magic ?
       let jsonText = CryptoJS.enc.Utf8.stringify(decryptData)
       jsonText = jsonText.substr(0, jsonText.lastIndexOf('}') + 1)
+      jsonText = jsonText.replace(/\'/g,'');
       // To Object
       let dataObj = JSON.parse(jsonText)
-      //console.log(dataObj);
       // Take useful part
       TRHMasterData.masterData = dataObj
+	  Object.keys(TRHMasterData.masterData).forEach((k) => {
+		console.log(`TRHMasterData.init${k}(store),`);
+	  });
+	  Object.entries(TRHMasterData.masterData).forEach(([k, v]) => {
+		console.log(k)
+		v.split('\n')
+		.map((line) => {
+			let arr = line.split(',')
+			//console.log(arr);
+		})
+	  });
       // level_master
       TRHMasterData.UserLevel = null
       // sword_level_master
@@ -91,9 +100,51 @@ define((require, exports, module) => {
         TRHMasterData.initFieldSquareMaster(store),
         TRHMasterData.initEventMaster(store),
         TRHMasterData.initEventLayerMaster(store),
-        TRHMasterData.initEventSquareMaster(store)
+        TRHMasterData.initEventSquareMaster(store)/*,
+
+		TRHMasterData.initEpisodeMaster(store),
+		TRHMasterData.initFormationMaster(store),
+		TRHMasterData.initMissionMaster(store),
+		TRHMasterData.initMissionRewardMaster(store),
+		TRHMasterData.initConquestMaster(store),
+		TRHMasterData.initConquestRewardMaster(store),
+		TRHMasterData.initFurnitureMaster(store),
+		TRHMasterData.initConquestFieldMaster(store),
+		TRHMasterData.initSceneMaster(store),
+		TRHMasterData.initVoiceMaster(store),
+		TRHMasterData.initMissionConditionMaster(store),
+		TRHMasterData.initSwordCompositionMaster(store),
+		TRHMasterData.initEventFieldMaster(store),
+		TRHMasterData.initFurnitureShopMaster(store),
+		TRHMasterData.initFurnitureItemMaster(store),
+		TRHMasterData.initEventGimmickCardMaster(store),
+		TRHMasterData.initEventPointRewardMaster(store),
+		TRHMasterData.initLayerMaster(store),
+		TRHMasterData.initAnniversaryEffectMaster(store),
+		TRHMasterData.initAnniversaryVoiceMaster(store),
+		TRHMasterData.initAnniversaryVoiceSwordMaster(store),
+		TRHMasterData.initExchangeMaster(store),
+		TRHMasterData.initExchangeRequirementMaster(store),
+		TRHMasterData.initSwordBgmMaster(store),
+		TRHMasterData.initEventRewardMaster(store),
+		TRHMasterData.initEventClearRewardMaster(store),
+		TRHMasterData.initEventFoxTextMaster(store),
+		TRHMasterData.initEventTreasureBoxesRoomMaster(store),
+		TRHMasterData.initLetterMaster(store),
+		TRHMasterData.initConquestConditionMaster(store),
+		TRHMasterData.initLimitedExchangeMaster(store),
+		TRHMasterData.initLimitedExchangeContentsMaster(store),
+		//TRHMasterData.initEventSceneDetailMaster(store),
+		//TRHMasterData.initSeasonMaster(store),
+		TRHMasterData.initSeasonExchangeMaster(store),
+		//TRHMasterData.initPowerfulTextMaster(store),
+		TRHMasterData.initFieldFoxTextMaster(store),
+		TRHMasterData.initCostumeItemMaster(store),
+		//TRHMasterData.initSwordEvolNormalMaster(store),
+		TRHMasterData.initTutorialFoxTextMaster(store),
+		TRHMasterData.initTipsMaster(store)*/
       ]).then(() => {
-        console.log(store)
+        console.log('done',store)
       })
     }
     // Init User Level Data
@@ -299,14 +350,20 @@ define((require, exports, module) => {
           obj['consumableId'] = _.toInteger(arr[0])
           obj['baseId'] = _.toInteger(arr[1])
           obj['name'] = arr[2]
-          //obj['description'] = arr[3]
-          obj['type'] = _.toInteger(arr[4])
-          obj['value'] = _.toInteger(arr[5])
-          obj['limitNum'] = _.toInteger(arr[6])
+          //obj['full_description'] = arr[3]
+		  //obj['desc'] = arr[4]
+          obj['type'] = _.toInteger(arr[5])
+		  //0=Does not effect swords, 1=Effects 1 sword, 2=Effects all in party
+		  //obj['effRange'] = _.toInteger(arr[6])
+		  //For recovery items 1=Fatigue, 2=Health, 3=EXP
+		  //obj['recType'] = _.toInteger(arr[7])
+		  //For items that have a numerical effect like multipliers, expansions, currency
+          obj['value'] = _.toInteger(arr[8])
+          obj['limitNum'] = _.toInteger(arr[9])
           //flg of available?
-          //obj['flg'] = _.toInteger(arr[7])
+          //obj['flg'] = _.toInteger(arr[10)
           //abandoned but exist??
-          //obj['unknown'] = _.toInteger(arr[8])
+          //obj['unknown'] = _.toInteger(arr[11])
           return obj
         })
         .keyBy('consumableId')

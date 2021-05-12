@@ -11,7 +11,9 @@ define((require, exports, module) => {
     '9': 'Archer',
     '10': 'Musketeer',
     '11': 'Bean Thrower',
-	'12': 'Oni Enemy Troop', //Demon Oodachi troops
-	'100' : 'Horse', //Most likely will not use this item
+	'12': 'Enemy Demon Troop', //Demon Oodachi Event troops 敵刀装_鬼
+	'13': 'Water Artillery', //Seaside Camp Event troops 水砲兵
+	'14': 'Enemy Water Artillery', //Enemy Seaside Camp troops 敵刀装_水砲兵
+	'100' : 'Horse'
   }
 })

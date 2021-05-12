@@ -18,7 +18,7 @@ define((require, exports, module) => {
                   store.dispatch('notice/addNotice', {
                     title: `${sword_name}'s Kiwame Training has ended!`,
                     message: `End Time： ${finished_at.format('HH:mm:ss')}`,
-                    context: 'TRH~ will need you to refresh game after picking him at Citadel to show he has returned!',
+                    context: 'Please go to the Citadel to greet him on his return!',
                     renotify: true,
                     disableAutoClose: true,
                     swordBaseId: sword_id,

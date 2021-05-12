@@ -134,6 +134,7 @@ define((require, exports, module) => {
             now: updateData.now
           })
           }
+		  
           let timeout = _.get(state, ['config', 'timeout'], 3)*1000
           if (timeout<3000){
             timeout = 3000
@@ -141,24 +142,34 @@ define((require, exports, module) => {
           if (state.config.hurt_notice == true) {
             if (playerParty.length) {
               if (swordName){
-                if (playerEquips.length)
+                if (playerEquips.length) {
+				//Troop Loss
                 store.dispatch('notice/addNotice', {
                   title: `Battle Report`,
-                  message: '<b style="font-size:100%;">[Troop Loss]</b><br>'+_.map(playerEquips, o => `${o.name} - ${o.equips}`).join('<br>')+'<br>'+_.map(playerParty, o => `[${o.battleStatusText}] ${o.name} HP -${o.hp}`).join('<br>'),
-                  context: `Drop： ${swordName}`,
-                  timeout: timeout,
+                  message: '<b style="font-size:100%;">[Troop Loss]</b><br>'+_.map(playerEquips, o => `${o.name} - ${o.equips}`).join('<br>'),
+                  context: ``,
+                  timeout: timeout*2,
                   swordBaseId: getSwordId,
                   icon: `static/sword/${getSwordId}.png`,
                 })
-                else
+				//Sword Damage
+				store.dispatch('notice/addNotice', {
+                  title: `Battle Report`,
+                  message: '<b style="font-size:100%;">[Sword Damage]</b><br>'+_.map(playerParty, o => `[${o.battleStatusText}] ${o.name} HP -${o.hp}`).join('<br>'),
+                  context: `Drop： ${swordName}`,
+                  timeout: timeout*2,
+                  swordBaseId: getSwordId,
+                  icon: `static/sword/${getSwordId}.png`,
+                })}
+                else {
                 store.dispatch('notice/addNotice', {
                   title: `Battle Report`,
                   message: _.map(playerParty, o => `[${o.battleStatusText}] ${o.name} HP -${o.hp}`).join('<br>'),
                   context: `Drop： ${swordName}`,
-                  timeout: timeout,
+                  timeout: timeout*2,
                   swordBaseId: getSwordId,
                   icon: `static/sword/${getSwordId}.png`,
-                })
+                })}
               }
             }
             else if (playerEquips.length) {
@@ -167,7 +178,7 @@ define((require, exports, module) => {
                 title: `Battle Report`,
                 message: _.map(playerEquips, o => `[Troops Loss] ${o.name} - ${o.equips}`).join('<br>'),
                 context: `Drop： ${swordName}`,
-                timeout: timeout,
+                timeout: timeout*2,
                 swordBaseId: getSwordId,
                 icon: `static/sword/${getSwordId}.png`,
               })

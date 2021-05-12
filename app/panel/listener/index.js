@@ -15,6 +15,12 @@ define((require, exports, module) => {
           if (server  !== 'static' && path.indexOf('?uid') > -1) {
             let action = path.split('?')[0]
 			let uid = path.split('?')[1]
+			if (uid.length > 4) {
+				store.commit('UId', {
+					path_uid: uid,
+					UID: uid.replace('uid=','')
+				})
+			}
             let postData = _.isObject(request['request']['postData'])
               ? _(request['request']['postData']['text'])
                 .replace(/%5F/g, '_')
@@ -60,7 +66,7 @@ define((require, exports, module) => {
             })
           }
         } else {
-          if(request.request.url.match(/1f1fa3d5e6cdc140f3c493457940e761\.bin/)) {
+          if (request.request.url.match(/https?:\/\/dovs9u514acja\.cloudfront\.net\/d\/ja\/m_(.*?)\.bin/)) {
             request.getContent((content, encoding) => {
               TRHMasterData.init(content, store)
             })

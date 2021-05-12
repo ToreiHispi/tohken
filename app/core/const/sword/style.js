@@ -16,6 +16,8 @@ define((require, exports, module) => {
     '14': 'Kotetsu',
     '15': 'Kotetsu…?',
     '16': 'Masamune',
-    '17': 'Gou'
+    '17': 'Gou',
+	  '18': 'Fukuoka Ichimonji',
+  	'19': 'Bungonokuni Yukihira'
   }
 })
